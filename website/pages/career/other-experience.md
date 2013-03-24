@@ -1,7 +1,6 @@
 source: "http://github.com/nathanrosspowell/nathanrosspowell.github.com/blob/dev/website/pages/career/other-experience.md"
 named: "other-experience"
 title: "Other Experience"
-published: "2012/07/17"
 url: "career/other-experience"
 template: "article.html"
 comments: True

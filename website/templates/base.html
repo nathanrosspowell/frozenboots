@@ -18,12 +18,14 @@
     {% for key, value in navbar %}
         {% if key is equalto( "" ) %}
             {% for data in value %}
-                {{ macros.menu_link_item( data, "#" ) }}
+                {% set page_link = url_for( "page", page_path = data.path ) %}
+                {{ macros.menu_link_item( data.title, page_link ) }}
             {% endfor %}
-        {% elif value|length is compare( ">", 1 ) %} 
+        {% elif value|length is compute( ">", 1 ) %} 
             {% call macros.menu_dropdown( key ) %}
                 {% for data in value %}
-                    {{ macros.menu_link_item( data, "#" ) }}
+                    {% set page_link = url_for( "page", page_path = data.path ) %}
+                    {{ macros.menu_link_item( data.title, page_link ) }}
                 {% endfor %}
             {% endcall %}
         {% endif %} 

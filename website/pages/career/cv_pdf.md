@@ -1,7 +1,6 @@
 source: "http://github.com/nathanrosspowell/nathanrosspowell.github.com/blob/dev/website/pages/career/cv.md"
 named: "cv-pdf"
 title: "Curriculum Vitae PDF Link"
-published: "2012/07/17"
 url: "career/cv"
 template: "article.html"
 comments: True

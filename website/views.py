@@ -43,9 +43,9 @@ def getkey( d, key ):
     return r
 app.jinja_env.globals.update( getkey = getkey )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def compare( x, type, y ):
+def compute( x, type, y ):
     return eval( "x %s y " % ( type, ) )
-app.jinja_env.tests.update( compare = compare )
+app.jinja_env.tests.update( compute = compute )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def makedate( value ):
     ret = ""
@@ -125,7 +125,26 @@ def create_navbar():
     getPage = lambda x, y: pages.get_or_404( os.path.join( x, y ) )
     getTitle = lambda x, y: getPage( x, y ).meta.get( "title", x )
     for key, value in create_navbar_structure().items(): 
-        navbar[ key.title() ] = [ getTitle( key, md ) for md in value ]
+        alphaSort = [] 
+        dateSort = []
+        for item in value:
+            path = os.path.join( key, item )
+            itemMeta = pages.get_or_404( path ).meta
+            title = itemMeta.get( "title", item )
+            sort = itemMeta.get( "published", title )
+            data = {
+                "title" : title,
+                "path" : path,
+                "sort" : sort,
+            }
+            if sort != title: 
+                dateSort.append( data )    
+            else:
+                alphaSort.append( data )
+        sorter = lambda k: k[ "sort" ]
+        sortedAlpha = sorted( alphaSort ,key = sorter  ) 
+        sortedDates = sorted( dateSort, key = sorter, reverse = True )
+        navbar[ key.title() ] = sortedDates + sortedAlpha 
     return navbar
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def base_render_template( template, **kwargs ):
@@ -153,7 +172,6 @@ def base_render_template( template, **kwargs ):
     return render_template( template, **kwargs )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def article_page( template, page_list, *args, **kwargs ):
-    print create_navbar()
     pages_list = list( pages.get_or_404( name ) for name in page_list )
     title = pages_list[ 0 ]
     if pages_list[ 0 ].meta.get( "comments", False ):
@@ -206,20 +224,7 @@ def index():
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @app.route( "/<path:page_path>/" )
 def page( page_path ):
-    page = pages.get_or_404( page_path )
-    template = page.meta.get( "template", blog_post_html )
-    spliturl = page_path.split( "/" )
-    kwargs = {}
-    if len( spliturl ) > 1:
-        if spliturl[ 0 ] == "blog":
-            kwargs = blog_kwargs( page_path, page )
-        elif spliturl[ 0 ] == "code":
-            kwargs = code_kwargs( page_path, page )
-    return blog(
-        template = template,
-        page_list = [ page ],
-        **kwargs
-    )
+    return article_page( index_html, ( page_path, ) )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Error pages.
 @app.errorhandler( 404 )
