@@ -76,30 +76,34 @@ Modernizr.load({
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </a>
-                        <a class="brand" href="#">Project name</a>
+                        <a class="brand" href="#">{% block boilerplate_project_name %}Project name{% endblock boilerplate_project_name %}</a>
                         <div class="nav-collapse collapse">
                             <ul class="nav">
-                                <li class="active"><a href="#">Home</a></li>
-                                <li><a href="#about">About</a></li>
-                                <li><a href="#contact">Contact</a></li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Action</a></li>
-                                        <li><a href="#">Another action</a></li>
-                                        <li><a href="#">Something else here</a></li>
-                                        <li class="divider"></li>
-                                        <li class="nav-header">Nav header</li>
-                                        <li><a href="#">Separated link</a></li>
-                                        <li><a href="#">One more separated link</a></li>
-                                    </ul>
-                                </li>
+                                {% block boilerplate_navbar %}
+                                    <li class="active"><a href="#">Home</a></li>
+                                    <li><a href="#about">About</a></li>
+                                    <li><a href="#contact">Contact</a></li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Action</a></li>
+                                            <li><a href="#">Another action</a></li>
+                                            <li><a href="#">Something else here</a></li>
+                                            <li class="divider"></li>
+                                            <li class="nav-header">Nav header</li>
+                                            <li><a href="#">Separated link</a></li>
+                                            <li><a href="#">One more separated link</a></li>
+                                        </ul>
+                                    </li>
+                                {% endblock boilerplate_navbar %}
                             </ul>
-                            <form class="navbar-form pull-right">
-                                <input class="span2" type="text" placeholder="Email">
-                                <input class="span2" type="password" placeholder="Password">
-                                <button type="submit" class="btn">Sign in</button>
-                            </form>
+                            {% block boilerplate_form %}
+                                <form class="navbar-form pull-right">
+                                    <input class="span2" type="text" placeholder="Email">
+                                    <input class="span2" type="password" placeholder="Password">
+                                    <button type="submit" class="btn">Sign in</button>
+                                </form>
+                            {% endblock boilerplate_form %}
                         </div><!--/.nav-collapse -->
                     </div>
                 </div>
@@ -151,7 +155,7 @@ Modernizr.load({
             {% block boilerplate_scripts %}
 
                 <script>
-                    var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+                    var _gaq=[['_setAccount','{% block boilerplate_google %}UA-XXXXX-X{% endblock boilerplate_google %}'],['_trackPageview']];
                     (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
                     g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
                     s.parentNode.insertBefore(g,s)}(document,'script'));

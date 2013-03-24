@@ -1,0 +1,66 @@
+{% extends "boilerplate.html" %}
+{% import "macros.html" as macros %}
+
+{% block yepnope_load %}
+{% endblock yepnope_load %}
+
+{% block yepnope_callback %}
+{% endblock yepnope_callback %}
+
+{% block yepnope_complete%}
+{% endblock yepnope_complete%}
+
+{% block boilerplate_project_name %}
+    Hello, werld!
+{% endblock boilerplate_project_name %}
+
+{% block boilerplate_navbar %}
+    {{ macros.menu_link_item( "Home", dm, True ) }}
+    {{ macros.menu_link_item( "About",  s, False ) }}
+    {{ macros.menu_link_item( "Contact",  d ) }}
+    {% call macros.menu_dropdown( "Dropdown SON") %}
+        {{ macros.menu_link_item( "Poop", derpppp) }}
+        {{ macros.menu_link_item( "Actionz",  d ) }}
+        {{ macros.menu_link_item( "Derp",  d ) }}
+        {{ macros.menu_divider() }}
+        {{ macros.menu_header( "heading" ) }}
+        {{ macros.menu_link_item( "Actionz",  d ) }}
+        {{ macros.menu_link_item( "Actionz",  d ) }}
+    {% endcall %}
+{% endblock boilerplate_navbar %}
+
+{% block boilerplate_form %}
+{% endblock boilerplate_form %}
+
+{% block boilerplate_hero_unit %}
+    <h1>
+        Awww Yeaaaa
+    </h1>
+    <p>
+        Some shit... 
+        Some shit... 
+        Some shit... 
+        Some shit... 
+        Some shit... 
+    </p>                        
+    {{ macros.button_primary( "Make your way back home...", url_for( "index" ) ) }}
+{% endblock boilerplate_hero_unit %}
+
+{% block boilerplate_row %}
+    {% call macros.row_span( "Heading 1", "Home", "#" ) %}
+        Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+    {% endcall %}
+    {% call macros.row_span( "Heading 2", "Home", "#" ) %}
+        Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+    {% endcall %}
+    {% call macros.row_span( "Heading 3", "Home", "#" ) %}
+        Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+    {% endcall %}
+{% endblock boilerplate_row %}
+
+{% block boilerplate_footer %}
+    <p>&copy; Company 2013</p>
+{% endblock boilerplate_footer %}
+
+{% block boilerplate_google %}
+{% endblock boilerplate_google %}
