@@ -11,22 +11,23 @@
 {% endblock yepnope_complete%}
 
 {% block boilerplate_project_name %}
-    Hello, werld!
+   Frozenboots 
 {% endblock boilerplate_project_name %}
 
 {% block boilerplate_navbar %}
-    {{ macros.menu_link_item( "Home", dm, True ) }}
-    {{ macros.menu_link_item( "About",  s, False ) }}
-    {{ macros.menu_link_item( "Contact",  d ) }}
-    {% call macros.menu_dropdown( "Dropdown SON") %}
-        {{ macros.menu_link_item( "Poop", derpppp) }}
-        {{ macros.menu_link_item( "Actionz",  d ) }}
-        {{ macros.menu_link_item( "Derp",  d ) }}
-        {{ macros.menu_divider() }}
-        {{ macros.menu_header( "heading" ) }}
-        {{ macros.menu_link_item( "Actionz",  d ) }}
-        {{ macros.menu_link_item( "Actionz",  d ) }}
-    {% endcall %}
+    {% for key, value in navbar %}
+        {% if key is equalto( "" ) %}
+            {% for data in value %}
+                {{ macros.menu_link_item( data, "#" ) }}
+            {% endfor %}
+        {% elif value|length is compare( ">", 1 ) %} 
+            {% call macros.menu_dropdown( key ) %}
+                {% for data in value %}
+                    {{ macros.menu_link_item( data, "#" ) }}
+                {% endfor %}
+            {% endcall %}
+        {% endif %} 
+    {% endfor %}
 {% endblock boilerplate_navbar %}
 
 {% block boilerplate_form %}
@@ -59,7 +60,12 @@
 {% endblock boilerplate_row %}
 
 {% block boilerplate_footer %}
-    <p>&copy; Company 2013</p>
+    <p>
+        &copy; Frozenboots Company 2013
+    </p>
+    <p>
+        This website was last statically updated: {{ date }} at {{ time }}.
+    </p>
 {% endblock boilerplate_footer %}
 
 {% block boilerplate_google %}

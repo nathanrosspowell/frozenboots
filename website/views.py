@@ -108,6 +108,26 @@ def directory():
         app.config[ "FLATPAGES_ROOT" ]
     )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Helpers.
+def create_navbar_structure():
+    navbar = {}
+    mainDir = directory()
+    isMd = lambda x: os.path.splitext( x )[ 1 ] in ( ".md", ".markdown", )
+    name = lambda x: os.path.splitext( x )[ 0 ] 
+    for root, dirs, files in os.walk( mainDir ):
+        baseDir = root.replace( mainDir, "" ).replace( "/", "" )
+        navbar[ baseDir ] = [ name( file ) for file in files if isMd( file ) ]
+    return navbar
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Helpers.
+def create_navbar():
+    navbar = {}
+    getPage = lambda x, y: pages.get_or_404( os.path.join( x, y ) )
+    getTitle = lambda x, y: getPage( x, y ).meta.get( "title", x )
+    for key, value in create_navbar_structure().items(): 
+        navbar[ key.title() ] = [ getTitle( key, md ) for md in value ]
+    return navbar
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def base_render_template( template, **kwargs ):
     wdatetime = get_w3c_date()
     date = makedate( wdatetime[ :10].replace( "-", "/" ) )
@@ -126,11 +146,14 @@ def base_render_template( template, **kwargs ):
             timezone,
             get_gmt_time(), 
         ) 
-    kwargs[ "credits" ] = pages.get_or_404( "menu/credits-short" )
-    kwargs[ "bio" ] = pages.get_or_404( "menu/bio" )
+
+    navbar = create_navbar()
+    navbarTuples = sorted( navbar.iteritems(), key = operator.itemgetter( 0 ) )
+    kwargs[ "navbar" ] = navbarTuples
     return render_template( template, **kwargs )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def article_page( template, page_list, *args, **kwargs ):
+    print create_navbar()
     pages_list = list( pages.get_or_404( name ) for name in page_list )
     title = pages_list[ 0 ]
     if pages_list[ 0 ].meta.get( "comments", False ):
