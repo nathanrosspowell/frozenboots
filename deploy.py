@@ -3,6 +3,7 @@
 # deploy. Authored by Nathan Ross Powell.
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import os
+import shutil
 import distutils.dir_util
 import sys
 from subprocess import call
@@ -28,6 +29,10 @@ def copyFiles( src, dst ):
     distutils.dir_util.copy_tree( src, dst )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Clone. 
+def removeBranch( src ):
+    shutil.rmtree( src )
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Clone. 
 def commitChanges( message ):
     call( [ "git", "add", "." ] )
     call( [ "git", "commit", "-m", message ] )
@@ -49,6 +54,7 @@ def moveToDeployRepro( user, repro, branch, commitMessage ):
     copyFiles( buildPath, clonePath )
     os.chdir( cloneFolderName )
     commitChanges( commitMessage )
+    removeBranch( clonePath )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Main script.
 if __name__ == "__main__":
