@@ -178,15 +178,12 @@ def base_render_template( template, **kwargs ):
         else:
             navKey = ""
             navValue = articlePath
-        print "NAV '%s'''''" % ( navKey, )
         tuples = navbar[ navKey ]
         navIndex = -1
         for i, navDict in enumerate( tuples ):
-            print navDict[ "path" ]
             if navDict[ "path" ] == articlePath:
                 navIndex = i
                 break
-        print "navindexz!", navIndex
         prev = None
         next = None
         if -1 < navIndex < len( tuples ):
@@ -194,7 +191,6 @@ def base_render_template( template, **kwargs ):
                 prev = pages.get_or_404( tuples[ navIndex - 1 ][ "path" ] )
             if navIndex + 1 < len( tuples ):
                 next = pages.get_or_404( tuples[ navIndex + 1 ][ "path" ] )
-        print "@@@@@@@@@@@@@@@", prev, next
         kwargs[ "previous_article" ] = prev
         kwargs[ "next_article" ] = next
     return render_template( template, **kwargs )
@@ -224,7 +220,7 @@ def index():
 def page( page_path ):
     return article_page( "article.html", page_path )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-@app.route( "/feeds/atom.xml" )
+#@app.route( "/feeds/atom.xml" )
 def atom():
     blogs = [ post for post in all_pages( directory(), "blog" ) ]
     with open( "website/feed_content.txt", 'r' ) as feed_cache:

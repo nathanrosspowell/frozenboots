@@ -54,7 +54,7 @@ def moveToDeployRepro( user, repro, branch, commitMessage ):
     copyFiles( buildPath, clonePath )
     os.chdir( cloneFolderName )
     commitChanges( commitMessage )
-    removeBranch( clonePath )
+    #removeBranch( clonePath )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Main script.
 if __name__ == "__main__":
