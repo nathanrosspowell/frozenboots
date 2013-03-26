@@ -2,16 +2,22 @@
 {% import "macros.html" as macros %}
 
 {% block yepnope_load %}
+    {% block base_load %}
+    {% endblock base_load %}
 {% endblock yepnope_load %}
 
 {% block yepnope_callback %}
+    {% block base_callback %}
+    {% endblock base_callback %}
 {% endblock yepnope_callback %}
 
 {% block yepnope_complete%}
+    {% block base_complete %}
+    {% endblock base_complete %}
 {% endblock yepnope_complete%}
 
 {% block boilerplate_project_name %}
-   Frozenboots 
+    {{ title }}
 {% endblock boilerplate_project_name %}
 
 {% block boilerplate_navbar %}
@@ -37,16 +43,12 @@
 
 {% block boilerplate_hero_unit %}
     <h1>
-        Awww Yissssssssssssssss!
+       Awwww yeaaaa! 
     </h1>
     <p>
-        Some poop... 
-        Some poop... 
-        Some poop... 
-        Some poop... 
-        Some poop... 
+        This is all simple template stuff in here!
+        I can just put anything and it comes up in bootstrap the hero unit.
     </p>                        
-    {{ macros.button_primary( "Make your way back home...", url_for( "index" ) ) }}
 {% endblock boilerplate_hero_unit %}
 
 {% block boilerplate_row %}
@@ -63,7 +65,7 @@
 
 {% block boilerplate_footer %}
     <p>
-        &copy; Frozenboots Company 2013
+        &copy; {{ title }} Company 2013
     </p>
     <p>
         This website was last statically updated: {{ date }} at {{ time }}.
@@ -71,4 +73,5 @@
 {% endblock boilerplate_footer %}
 
 {% block boilerplate_google %}
+    {{ google_analytics }}
 {% endblock boilerplate_google %}

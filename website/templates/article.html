@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros %}
+
+{% block base_load %}
+    "codehilitecss" : "{{ url_for(".static", filename="css/codehilite.css") }}", 
+{% endblock base_load %}
+
+{% block base_callback %}
+{% endblock base_callback %}
+
+{% block base_complete %}
+{% endblock base_complete %}
+
+{% block boilerplate_hero_unit %}
+    <h1>
+        {{ article.title|title }}
+    </h1>
+    <p>
+        {{ article.html|safe }}
+    </p>                        
+    {{ macros.button_primary( "Make your way back home...", url_for( "index" ) ) }}
+{% endblock boilerplate_hero_unit %}
+
+{% block boilerplate_row %}
+    {% if previous_article %}
+    {% call macros.row_span( previous_article.title, "Read previous", url_for( "page", page_path=previous_article.path ) ) %}
+            {{ previous_article.short|safe }}
+        {% endcall %}
+    {% endif %}
+    {% if next_article %}
+        {% call macros.row_span( next_article.title, "Read next", url_for( "page", page_path=next_article.path ) ) %}
+            {{ next_article.short|safe }}
+        {% endcall %}
+    {% endif %}
+{% endblock boilerplate_row %}

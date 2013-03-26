@@ -144,12 +144,12 @@ def create_navbar():
         sorter = lambda k: k[ "sort" ]
         sortedAlpha = sorted( alphaSort ,key = sorter  ) 
         sortedDates = sorted( dateSort, key = sorter, reverse = True )
-        navbar[ key.title() ] = sortedDates + sortedAlpha 
+        navbar[ key ] = sortedDates + sortedAlpha 
     return navbar
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def base_render_template( template, **kwargs ):
     wdatetime = get_w3c_date()
-    date = makedate( wdatetime[ :10].replace( "-", "/" ) )
+    date = makedate( wdatetime[ :10 ].replace( "-", "/" ) )
     stime = wdatetime[ 11:19 ]
     addition = wdatetime[ 19: ]
     kwargs[ "date" ] = date
@@ -165,66 +165,91 @@ def base_render_template( template, **kwargs ):
             timezone,
             get_gmt_time(), 
         ) 
-
     navbar = create_navbar()
     navbarTuples = sorted( navbar.iteritems(), key = operator.itemgetter( 0 ) )
     kwargs[ "navbar" ] = navbarTuples
+    kwargs[ "title" ] = app.config[ "TITLE" ]
+    kwargs[ "google_analytics" ] = app.config[ "GOOGLE_ANALYTICS" ]
+    article = kwargs.get( "article", False )
+    if article:
+        articlePath = kwargs.get( "article_path", "" )
+        if "/" in articlePath:
+            navKey, navValue = articlePath.split( "/" )
+        else:
+            navKey = ""
+            navValue = articlePath
+        print "NAV '%s'''''" % ( navKey, )
+        tuples = navbar[ navKey ]
+        navIndex = -1
+        for i, navDict in enumerate( tuples ):
+            print navDict[ "path" ]
+            if navDict[ "path" ] == articlePath:
+                navIndex = i
+                break
+        print "navindexz!", navIndex
+        prev = None
+        next = None
+        if -1 < navIndex < len( tuples ):
+            if 0 < navIndex:
+                prev = pages.get_or_404( tuples[ navIndex - 1 ][ "path" ] )
+            if navIndex + 1 < len( tuples ):
+                next = pages.get_or_404( tuples[ navIndex + 1 ][ "path" ] )
+        print "@@@@@@@@@@@@@@@", prev, next
+        kwargs[ "previous_article" ] = prev
+        kwargs[ "next_article" ] = next
     return render_template( template, **kwargs )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def article_page( template, page_list, *args, **kwargs ):
-    pages_list = list( pages.get_or_404( name ) for name in page_list )
-    title = pages_list[ 0 ]
-    if pages_list[ 0 ].meta.get( "comments", False ):
-        comment_id = "/%s/" % page_list[ 0 ]
-        comment_title = title.meta.get( "title", "No Title" )
+def article_page( template, page_path ):
+    pageMd = pages.get_or_404( page_path )
+    pageMeta = pageMd.meta
+    if pageMeta.get( "comments", False ):
+        comment_id = "/%s/" % pageMd
+        comment_title = pageMeta.get( "title", "No Title" )
     else:
         comment_id = None
         comment_title = None
     return base_render_template( template,
-            pages = pages_list,
+            article = pageMd,
+            article_path = page_path,
             comment_override_id = comment_id,
             comment_override_title = comment_title,
-            *args,
-            **kwargs
     )
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Key word arg helpers.
-def code_kwargs( page_path, page ):
-    readme = page.meta.get( "readme", None )
-    if readme:
-        responce = urllib2.urlopen( readme )
-        readme = responce.read()
-    kwargs = {
-        "readme" : readme, 
-    }
-    return kwargs
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def blog_kwargs( page_path, page ):
-    kwargs = {}
-    blogs = [ post for post in all_pages( directory(), "blog" ) ]
-    length = len( blogs )
-    index = -1
-    for blog in blogs:
-        if blog.path == page.path:
-            index = blogs.index( blog )
-            break
-    if index > -1:
-        prevBlog  = index - 1
-        if prevBlog >= 0:
-            kwargs[ "nextBlog" ] = blogs[ prevBlog ]
-        nextBlog = index + 1
-        if nextBlog < length:
-            kwargs[ "prevBlog" ] = blogs[ nextBlog ]
-    return kwargs
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Redirects.
 @app.route('/')
 def index():
-    return article_page( index_html, ( "menu/home-page", ) )
+    return base_render_template( index_html )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @app.route( "/<path:page_path>/" )
 def page( page_path ):
-    return article_page( index_html, ( page_path, ) )
+    return article_page( "article.html", page_path )
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+@app.route( "/feeds/atom.xml" )
+def atom():
+    blogs = [ post for post in all_pages( directory(), "blog" ) ]
+    with open( "website/feed_content.txt", 'r' ) as feed_cache:
+        cache_blogs = feed_cache.readlines()
+    changed = False
+    if len( blogs ) != len( cache_blogs ):
+        changed = True
+    if not changed:
+        for index, blog in enumerate( blogs ):
+            if blog.path != cache_blogs[ index ].strip():
+                changed = True
+                break
+    if changed:
+        w3c_update = get_w3c_date()
+        with open( "website/feed_content.txt", 'w' ) as new_feed:
+            new_feed.writelines( [ blog.path+"\n" for blog in blogs ] )
+        with open( "website/feed_time.txt", 'w' ) as new_time:
+            new_time.write( w3c_update )
+    else:
+        with open( "website/feed_time.txt", 'r' ) as cache_time:
+            w3c_update = cache_time.read().strip()
+    return base_render_template( atom_xml,
+        pages = blogs,
+        w3c_update = w3c_update
+    ), 200, {'Content-Type': 'application/atom+xml; charset=utf-8'}
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Error pages.
 @app.errorhandler( 404 )
