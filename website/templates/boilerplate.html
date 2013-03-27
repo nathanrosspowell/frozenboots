@@ -141,6 +141,9 @@ Modernizr.load({
                     {% endblock boilerplate_row %}
                 </div>
 
+                {% block boilerplate_body_extra %}
+                {% endblock boilerplate_body_extra %}
+
                 <hr>
 
                 <footer>
@@ -150,8 +153,6 @@ Modernizr.load({
                 </footer>
 
             </div> <!-- /container -->
-            {% block boilerplate_body_extra %}
-            {% endblock boilerplate_body_extra %}
             {% block boilerplate_scripts %}
 
                 <script>

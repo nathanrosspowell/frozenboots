@@ -204,10 +204,12 @@ def article_page( template, page_path ):
         comment_id = None
         comment_title = None
     return base_render_template( template,
-            article = pageMd,
-            article_path = page_path,
-            comment_override_id = comment_id,
-            comment_override_title = comment_title,
+        article = pageMd,
+        article_path = page_path,
+        comment_override_id = comment_id,
+        comment_override_title = comment_title,
+        web_root = app.config[ "WEB_ROOT" ],
+        disqus = app.config[ "DISQUS_NAME" ],
     )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Redirects.
@@ -255,6 +257,7 @@ def atom():
         web_root = app.config[ "WEB_ROOT" ],
         author = app.config[ "AUTHOR" ],
         email = app.config[ "EMAIL" ], 
+        title = app.config[ "TITLE" ],
     ), 200, {'Content-Type': 'application/atom+xml; charset=utf-8'}
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Error pages.

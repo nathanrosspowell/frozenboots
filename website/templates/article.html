@@ -9,6 +9,17 @@
 {% endblock base_callback %}
 
 {% block base_complete %}
+    {% if article.comments %}
+        var disqus_shortname = '{{ disqus }}';
+        var disqus_url = "{{ web_root }}{{ page_id }}";
+        var disqus_identifier = "{{ page_id }}";
+        var disqus_title = "{{ page_title }}";
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    {% endif %}
 {% endblock base_complete %}
 
 {% block boilerplate_hero_unit %}
@@ -18,7 +29,9 @@
     <p>
         {{ article.html|safe }}
     </p>                        
-    {{ macros.button_primary( "Make your way back home...", url_for( "index" ) ) }}
+    {% if article.comments %}
+        {{ macros.button_primary( "Comments", "#disqus_thread" ) }}
+    {% endif %}
 {% endblock boilerplate_hero_unit %}
 
 {% block boilerplate_row %}
@@ -33,3 +46,10 @@
         {% endcall %}
     {% endif %}
 {% endblock boilerplate_row %}
+
+{% block boilerplate_body_extra %}
+    {% if article.comments %}
+        <hr/>
+        <div id="disqus_thread"></div>
+    {% endif %}
+{% endblock boilerplate_body_extra %}
