@@ -76,7 +76,7 @@ Modernizr.load({
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </a>
-                        <a class="brand" href="#">{% block boilerplate_project_name %}Project name{% endblock boilerplate_project_name %}</a>
+                        <a class="brand" href="{{ url_for( "index" ) }}">{% block boilerplate_project_name %}Project name{% endblock boilerplate_project_name %}</a>
                         <div class="nav-collapse collapse">
                             <ul class="nav">
                                 {% block boilerplate_navbar %}

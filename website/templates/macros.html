@@ -1,5 +1,11 @@
-{% macro menu_dropdown( dropdown_title, dropdown_link ) -%}
-    <li class="dropdown">
+{% macro menu_dropdown( dropdown_title, dropdown_link, active ) -%}
+    <li
+        {% if active %}
+             class="dropdown active"
+         {% else %}
+            class="dropdown"
+         {% endif %}
+    >
         <a href="{{ dropdown_link }}" class="dropdown-toggle" data-toggle="dropdown">
             {{ dropdown_title }}
             <b class="caret"></b>

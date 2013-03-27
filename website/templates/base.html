@@ -17,7 +17,7 @@
 {% endblock yepnope_complete%}
 
 {% block boilerplate_project_name %}
-    {{ title }}
+    {{ title }} 
 {% endblock boilerplate_project_name %}
 
 {% block boilerplate_navbar %}
@@ -25,10 +25,12 @@
         {% if key is equalto( "" ) %}
             {% for data in value %}
                 {% set page_link = url_for( "page", page_path = data.path ) %}
-                {{ macros.menu_link_item( data.title, page_link ) }}
+                {% set active = menu_selected is equalto( data.path ) %} 
+                {{ macros.menu_link_item( data.title|title, page_link, active ) }}
             {% endfor %}
         {% elif value|length is compute( ">", 1 ) %} 
-            {% call macros.menu_dropdown( key ) %}
+            {% set active = menu_selected is equalto( key ) %} 
+            {% call macros.menu_dropdown( key|title, "", active ) %}
                 {% for data in value %}
                     {% set page_link = url_for( "page", page_path = data.path ) %}
                     {{ macros.menu_link_item( data.title, page_link ) }}
@@ -44,6 +46,7 @@
 {% block boilerplate_hero_unit %}
     <h1>
        Awwww yeaaaa! 
+       {{ menu_selected }} 
     </h1>
     <p>
         This is all simple template stuff in here!

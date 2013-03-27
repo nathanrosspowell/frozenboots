@@ -175,9 +175,11 @@ def base_render_template( template, **kwargs ):
         articlePath = kwargs.get( "article_path", "" )
         if "/" in articlePath:
             navKey, navValue = articlePath.split( "/" )
+            kwargs[ "menu_selected" ] = navKey 
         else:
             navKey = ""
             navValue = articlePath
+            kwargs[ "menu_selected" ] = articlePath 
         tuples = navbar[ navKey ]
         navIndex = -1
         for i, navDict in enumerate( tuples ):
