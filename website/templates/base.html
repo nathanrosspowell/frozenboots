@@ -41,6 +41,11 @@
 {% endblock boilerplate_navbar %}
 
 {% block boilerplate_form %}
+    <form class="navbar-form pull-right" method="get" action="http://www.google.com/search">
+        <input class="span2" type="text" name="q" placeholder="Site search..." />
+        <input type="hidden"  name="sitesearch" value="{{ web_root }}" />
+        <button type="submit" value="Google Search" class="btn">Search</button>
+    </form>
 {% endblock boilerplate_form %}
 
 {% block boilerplate_hero_unit %}
