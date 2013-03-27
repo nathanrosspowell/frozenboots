@@ -153,6 +153,7 @@ def base_render_template( template, **kwargs ):
     stime = wdatetime[ 11:19 ]
     addition = wdatetime[ 19: ]
     kwargs[ "date" ] = date
+    kwargs[ "year" ] = date[ :4 ]
     timezone = get_time_zone()
     if timezone.upper() == "GMT":
         kwargs[ "time" ] = "%s %s" % ( 
@@ -160,7 +161,7 @@ def base_render_template( template, **kwargs ):
             timezone,
         ) 
     else:
-        kwargs[ "time" ] = "%s %s which is %s UTC/GMT" % ( 
+        kwargs[ "time" ] = "%s %s. Which is %s UTC/GMT" % ( 
             stime, 
             timezone,
             get_gmt_time(), 
@@ -222,7 +223,7 @@ def index():
 def page( page_path ):
     return article_page( "article.html", page_path )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#@app.route( "/feeds/atom.xml" )
+@app.route( "/feeds/atom.xml" )
 def atom():
     blogs = [ post for post in all_pages( directory(), "blog" ) ]
     with open( "website/feed_content.txt", 'r' ) as feed_cache:
