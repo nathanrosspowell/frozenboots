@@ -251,7 +251,10 @@ def atom():
             w3c_update = cache_time.read().strip()
     return base_render_template( "atom.xml",
         pages = pub,
-        w3c_update = w3c_update
+        w3c_update = w3c_update,
+        web_root = app.config[ "WEB_ROOT" ],
+        author = app.config[ "AUTHOR" ],
+        email = app.config[ "EMAIL" ], 
     ), 200, {'Content-Type': 'application/atom+xml; charset=utf-8'}
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Error pages.
