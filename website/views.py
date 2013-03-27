@@ -96,12 +96,6 @@ def equalto( x, y ):
     return x == y
 app.jinja_env.tests.update( equalto = equalto )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def get_tagged_blogs( tag ):
-    if tag not in get_tags()[ 0 ]:
-        return []
-    return [ post for post in tag_pages( tag) ]
-app.jinja_env.globals.update( get_tagged_blogs = get_tagged_blogs )
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Helpers.
 def directory():
     return os.path.join( app.config[ "ROOT_DIR" ],
@@ -132,12 +126,14 @@ def create_navbar():
             itemMeta = pages.get_or_404( path ).meta
             title = itemMeta.get( "title", item )
             sort = itemMeta.get( "published", title )
+            published = sort != title
             data = {
                 "title" : title,
                 "path" : path,
                 "sort" : sort,
+                "published" : published,
             }
-            if sort != title: 
+            if published: 
                 dateSort.append( data )    
             else:
                 alphaSort.append( data )
@@ -225,28 +221,36 @@ def page( page_path ):
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @app.route( "/feeds/atom.xml" )
 def atom():
-    blogs = [ post for post in all_pages( directory(), "blog" ) ]
-    with open( "website/feed_content.txt", 'r' ) as feed_cache:
-        cache_blogs = feed_cache.readlines()
+    published = []
+    for key, value in create_navbar().items():
+        for item in value:
+            if item[ "published" ]:
+                published.append( item[ "path" ] )
+    pub = [ pages.get_or_404( itemPath ) for itemPath in published ] 
+    try:
+        with open( "website/feed_content.txt", 'r' ) as feed_cache:
+            cache_pub = feed_cache.readlines()
+    except:
+        cache_pub = []
     changed = False
-    if len( blogs ) != len( cache_blogs ):
+    if len( pub ) != len( cache_pub ):
         changed = True
     if not changed:
-        for index, blog in enumerate( blogs ):
-            if blog.path != cache_blogs[ index ].strip():
+        for index, blog in enumerate( pub ):
+            if blog.path != cache_pub[ index ].strip():
                 changed = True
                 break
     if changed:
         w3c_update = get_w3c_date()
         with open( "website/feed_content.txt", 'w' ) as new_feed:
-            new_feed.writelines( [ blog.path+"\n" for blog in blogs ] )
+            new_feed.writelines( [ item.path+"\n" for item in pub ] )
         with open( "website/feed_time.txt", 'w' ) as new_time:
             new_time.write( w3c_update )
     else:
         with open( "website/feed_time.txt", 'r' ) as cache_time:
             w3c_update = cache_time.read().strip()
-    return base_render_template( atom_xml,
-        pages = blogs,
+    return base_render_template( "atom.xml",
+        pages = pub,
         w3c_update = w3c_update
     ), 200, {'Content-Type': 'application/atom+xml; charset=utf-8'}
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
