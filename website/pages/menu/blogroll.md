@@ -2,7 +2,6 @@ source: "http://github.com/nathanrosspowell/nathanrosspowell.github.com/blob/dev
 named: blogroll
 title: Other Blogs And Pages 
 comments: True
-template: "article.html"
 
 * [Elliot Powell][elliot] - My brother, talented dancer, singer, performer. The _Mentalist_.
 * [Chris Douglass][doug] - The MMAthlete, pro fighter Chris "The Body" Douglass.

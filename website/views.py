@@ -178,15 +178,18 @@ def base_render_template( template, **kwargs ):
         subfolderPage = subfolder.get( "title", "No Title" ) 
         kwargs[ "subfolder" ] = subfolderPage
         kwargs[ "menu_selected" ] = subfolderPage 
+        kwargs[ "page_selected" ] = False
     elif article is not False:
         articlePath = kwargs.get( "article_path", "" )
         if "/" in articlePath:
             navKey, navValue = articlePath.split( "/" )
             kwargs[ "menu_selected" ] = navKey 
+            kwargs[ "page_selected" ] = articlePath 
         else:
             navKey = ""
             navValue = articlePath
             kwargs[ "menu_selected" ] = articlePath 
+            kwargs[ "page_selected" ] = False 
         tuples = navbar[ navKey ][ 0 ] + navbar[ navKey ][ 1 ]
         navIndex = -1
         for i, navDict in enumerate( tuples ):

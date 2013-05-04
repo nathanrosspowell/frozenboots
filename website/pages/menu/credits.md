@@ -2,7 +2,6 @@ source: "http://github.com/nathanrosspowell/nathanrosspowell.github.com/blob/dev
 named: credits
 title: Credits 
 comments: False
-template: "article.html"
 
 To create this website I used the following technologys:
 

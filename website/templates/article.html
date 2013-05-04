@@ -3,9 +3,13 @@
 
 {% block base_load %}
     "codehilitecss" : "{{ url_for(".static", filename="css/codehilite.css") }}", 
+    {% block article_load %}
+    {% endblock article_load %}
 {% endblock base_load %}
 
 {% block base_callback %}
+    {% block article_callback %}
+    {% endblock article_callback %}
 {% endblock base_callback %}
 
 {% block base_complete %}
@@ -20,6 +24,8 @@
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
         })();
     {% endif %}
+    {% block article_complete %}
+    {% endblock article_complete %}
 {% endblock base_complete %}
 
 {% block boilerplate_hero_unit %}
@@ -36,14 +42,30 @@
 
 {% block boilerplate_row %}
     {% if previous_article %}
-    {% call macros.row_span( previous_article.title, "Read previous", url_for( "page", page_path=previous_article.path ) ) %}
+        {% call macros.row_span( previous_article.title, "Read previous", url_for( "page", page_path=previous_article.path ) ) %}
             {{ previous_article.short|safe }}
+        {% endcall %}
+    {% else %}
+        {{ macros.row_span_empty() }}
+    {% endif %}
+    {% if page_selected is equalto( False ) %}
+        {% set link = url_for( ".index" ) %}
+        {% call macros.row_span( "Home", "Home", link ) %}
+            One click away from the home page. Have away with yourself.
+        {% endcall %}
+    {% else %}
+        {% set link = url_for( "page", page_path = menu_selected ) %}
+        {% call macros.row_span( "Index Page", menu_selected|title, link ) %}
+            Go back to the index page for {{ menu_selected }} to see all of the pages like this.
+            Or, skip to the next or previous pages.
         {% endcall %}
     {% endif %}
     {% if next_article %}
         {% call macros.row_span( next_article.title, "Read next", url_for( "page", page_path=next_article.path ) ) %}
             {{ next_article.short|safe }}
         {% endcall %}
+    {% else %}
+        {{ macros.row_span_empty() }}
     {% endif %}
 {% endblock boilerplate_row %}
 

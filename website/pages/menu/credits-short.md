@@ -2,7 +2,6 @@ source: "http://github.com/nathanrosspowell/nathanrosspowell.github.com/blob/dev
 named: credits-short
 title: Credits 
 comments: False
-template: "article.html"
 
 Copyright ©2013 - [nathanrosspowell.com][home] - All Rights Reserved - [Credits][credits].
 
