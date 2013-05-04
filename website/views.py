@@ -167,6 +167,8 @@ def base_render_template( template, **kwargs ):
     kwargs[ "navbar" ] = navbarTuples
     kwargs[ "title" ] = app.config[ "TITLE" ]
     kwargs[ "google_analytics" ] = app.config[ "GOOGLE_ANALYTICS" ]
+    kwargs[ "submenu_page_limit" ] = app.config[ "SUB_MENU_PAGE_LIMIT" ]
+    kwargs[ "submenu_article_limit" ] = app.config[ "SUB_MENU_ARTICLE_LIMIT" ]
     article = kwargs.get( "article", False )
     try:
         subfolder = article.get( "subfolder", False )
@@ -243,7 +245,6 @@ def index():
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @app.route( "/<path:page_path>/" )
 def page( page_path ):
-    print "tttttt", page_path
     return article_page( page_path )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @app.route( "/feeds/atom.xml" )

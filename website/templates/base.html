@@ -23,31 +23,50 @@
 {% block boilerplate_navbar %}
     {% for key, value in navbar %}
         {% if key is equalto( "" ) %}
-            {% for data in value %}
-                {% set page_link = url_for( "page", page_path = data.path ) %}
-                {% set active = menu_selected is equalto( data.path ) %} 
-                {{ macros.menu_link_item( data.title|title, page_link, active ) }}
-            {% endfor %}
+            {% if value[ 0 ]|length > 0 %}
+                {% for data in value[ 0 ] %}
+                    {% set page_link = url_for( "page", page_path = data.path ) %}
+                    {% set active = menu_selected is equalto( data.path ) %} 
+                    {{ macros.menu_link_item( data.title|title, page_link, active ) }}
+                {% endfor %}
+            {% endif %}
+            {% if value[ 1 ]|length > 0 %}
+                {% for data in value[ 1 ] %}
+                    {% set page_link = url_for( "page", page_path = data.path ) %}
+                    {% set active = menu_selected is equalto( data.path ) %} 
+                    {{ macros.menu_link_item( data.title|title, page_link, active ) }}
+                {% endfor %}
+            {% endif %}
         {% elif value|length is compute( ">", 1 ) %} 
             {% set active = menu_selected is equalto( key ) %} 
             {% set drop_link = url_for( "page", page_path = key ) %}
             {% call macros.menu_dropdown( key|title, drop_link, active ) %}
-                {{ macros.menu_link_item( "Index", drop_link, active ) }}
+                {{ macros.menu_link_item( "Index", drop_link, False ) }}
                 {% if value[ 0 ]|length > 0 %}
                     <li class="divider"></li>
                     <li class="nav-header">Pages</li>
                     {% for data in value[ 0 ] %}
                         {% set page_link = url_for( "page", page_path = data.path ) %}
-                        {{ macros.menu_link_item( data.title, page_link ) }}
+                        {% if loop.index0 < submenu_page_limit %}
+                            {{ macros.menu_link_item( data.title, page_link ) }}
+                        {% endif %}
                     {% endfor %}
+                    {% if value[ 0 ]|length is compute( ">", submenu_page_limit ) %}
+                        {{ macros.menu_link_item( "... more pages", drop_link, False ) }}
+                    {% endif %}
                 {% endif %}
                 {% if value[ 1 ]|length > 0 %}
                     <li class="divider"></li>
                     <li class="nav-header">Articles</li>
-                    {% for data in value[ 1 ] %}
+                    {% for data in value[ 1 ]  %}
                         {% set page_link = url_for( "page", page_path = data.path ) %}
-                        {{ macros.menu_link_item( data.title, page_link ) }}
+                        {% if loop.index0 < submenu_article_limit %}
+                            {{ macros.menu_link_item( data.title, page_link ) }}
+                        {% endif %}
                     {% endfor %}
+                    {% if value[ 1 ]|length is compute( ">", submenu_article_limit ) %}
+                        {{ macros.menu_link_item( "... more pages", drop_link, False ) }}
+                    {% endif %}
                 {% endif %}
             {% endcall %}
         {% endif %} 
