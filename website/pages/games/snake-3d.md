@@ -5,7 +5,6 @@ published: "2012/08/21"
 time: "22:07:35"
 w3c: "2012-08-21T22:07:35-04:00"
 url: "games/snake-3d"
-template: "game.html"
 comments: True
 published: No
 release: minor 

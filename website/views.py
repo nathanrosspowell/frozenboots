@@ -140,7 +140,7 @@ def create_navbar():
         sorter = lambda k: k[ "sort" ]
         sortedAlpha = sorted( alphaSort ,key = sorter  ) 
         sortedDates = sorted( dateSort, key = sorter, reverse = True )
-        navbar[ key ] = sortedDates + sortedAlpha 
+        navbar[ key ] = ( sortedAlpha, sortedDates )
     return navbar
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def base_render_template( template, **kwargs ):
@@ -185,7 +185,7 @@ def base_render_template( template, **kwargs ):
             navKey = ""
             navValue = articlePath
             kwargs[ "menu_selected" ] = articlePath 
-        tuples = navbar[ navKey ]
+        tuples = navbar[ navKey ][ 0 ] + navbar[ navKey ][ 1 ]
         navIndex = -1
         for i, navDict in enumerate( tuples ):
             if navDict[ "path" ] == articlePath:

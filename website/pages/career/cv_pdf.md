@@ -2,7 +2,6 @@ source: "http://github.com/nathanrosspowell/nathanrosspowell.github.com/blob/dev
 named: "cv-pdf"
 title: "Curriculum Vitae PDF Link"
 url: "career/cv"
-template: "article.html"
 comments: True
 short: "Link to the CV"
 tags:

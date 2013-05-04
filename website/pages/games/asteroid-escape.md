@@ -5,7 +5,6 @@ published: "2012/08/21"
 time: "22:06:23"
 w3c: "2012-08-21T22:06:23-04:00"
 url: "games/asteroid-escape"
-template: "game.html"
 comments: True
 published: No
 release: minor 

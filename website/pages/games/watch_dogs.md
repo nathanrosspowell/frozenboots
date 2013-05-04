@@ -5,7 +5,6 @@ published: "2013/02/09"
 time: "21:24:19"
 w3c: "2013-02-09T21:24:19-04:00"
 url: "games/watch_dogs"
-template: "game.html"
 comments: True
 published: Future Release 
 release: major

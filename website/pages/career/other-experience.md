@@ -2,7 +2,6 @@ source: "http://github.com/nathanrosspowell/nathanrosspowell.github.com/blob/dev
 named: "other-experience"
 title: "Other Experience"
 url: "career/other-experience"
-template: "article.html"
 comments: True
 short: "Othere experience outside of my daily work life."
 tags:

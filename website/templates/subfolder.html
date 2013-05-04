@@ -29,10 +29,20 @@
     <p>
         {% for key, value in navbar %}
             {% if key is equalto( subfolder ) %}
-                {% for data in value %}
-                    {% set page_link = url_for( "page", page_path = data.path ) %}
-                    {{ macros.menu_link_item( data.title|title, page_link, active ) }}
-                {% endfor %}
+                {% if value[ 0 ]|length > 0 %}
+                    <p>Pages</p>
+                    {% for data in value[ 0 ] %}
+                        {% set page_link = url_for( "page", page_path = data.path ) %}
+                        {{ macros.menu_link_item( data.title, page_link ) }}
+                    {% endfor %}
+                {% endif %}
+                {% if value[ 1 ]|length > 0 %}
+                    <p>Articles</p>
+                    {% for data in value[ 1 ] %}
+                        {% set page_link = url_for( "page", page_path = data.path ) %}
+                        {{ macros.menu_link_item( data.title, page_link ) }}
+                    {% endfor %}
+                {% endif %}
             {% endif %} 
         {% endfor %}
     </p>                        
