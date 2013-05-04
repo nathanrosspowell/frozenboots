@@ -2,7 +2,6 @@ source: "http://github.com/nathanrosspowell/nathanrosspowell.github.com/blob/dev
 named: connect
 title: Connect
 comments: True
-template: "connect.html"
 
 Feel free to email me via:
 

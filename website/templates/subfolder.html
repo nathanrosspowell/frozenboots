@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros %}
+
+{% block base_load %}
+    "codehilitecss" : "{{ url_for(".static", filename="css/codehilite.css") }}", 
+{% endblock base_load %}
+
+{% block base_callback %}
+{% endblock base_callback %}
+
+{% block base_complete %}
+    {% if article.comments %}
+        var disqus_shortname = '{{ disqus }}';
+        var disqus_url = "{{ web_root }}{{ page_id }}";
+        var disqus_identifier = "{{ page_id }}";
+        var disqus_title = "{{ page_title }}";
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    {% endif %}
+{% endblock base_complete %}
+
+{% block boilerplate_hero_unit %}
+    <h1>
+        {{ subfolder|title }}
+    </h1>
+    <p>
+        {% for key, value in navbar %}
+            {% if key is equalto( subfolder ) %}
+                {% for data in value %}
+                    {% set page_link = url_for( "page", page_path = data.path ) %}
+                    {{ macros.menu_link_item( data.title|title, page_link, active ) }}
+                {% endfor %}
+            {% endif %} 
+        {% endfor %}
+    </p>                        
+    {% if article.comments %}
+        {{ macros.button_primary( "Comments", "#disqus_thread" ) }}
+    {% endif %}
+{% endblock boilerplate_hero_unit %}
+
+{% block boilerplate_row %}
+    {% call macros.row_span( "Get back home", "Home", url_for( ".index" ) ) %}
+        Go to the home page.
+    {% endcall %}
+{% endblock boilerplate_row %}

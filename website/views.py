@@ -168,7 +168,15 @@ def base_render_template( template, **kwargs ):
     kwargs[ "title" ] = app.config[ "TITLE" ]
     kwargs[ "google_analytics" ] = app.config[ "GOOGLE_ANALYTICS" ]
     article = kwargs.get( "article", False )
-    if article:
+    try:
+        subfolder = article.get( "subfolder", False )
+    except:
+        subfolder = False
+    if subfolder is not False:
+        subfolderPage = subfolder.get( "title", "No Title" ) 
+        kwargs[ "subfolder" ] = subfolderPage
+        kwargs[ "menu_selected" ] = subfolderPage 
+    elif article is not False:
         articlePath = kwargs.get( "article_path", "" )
         if "/" in articlePath:
             navKey, navValue = articlePath.split( "/" )
@@ -194,9 +202,25 @@ def base_render_template( template, **kwargs ):
         kwargs[ "next_article" ] = next
     return render_template( template, **kwargs )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def article_page( template, page_path ):
-    pageMd = pages.get_or_404( page_path )
-    pageMeta = pageMd.meta
+def article_page( page_path ):
+    pageMd = pages.get( page_path )
+    if pageMd is None:
+        sub = len( [ x for x in os.listdir( directory() ) if x == page_path ] )
+        if sub == 1:
+            pageMd = { 
+                "subfolder" : {
+                    "title" : page_path,
+                },
+            }            
+            pageMeta = {
+                "template" : "subfolder.html",
+            }
+        else:
+            pageMd = pages.get_or_404( page_path )
+            pageMeta = pageMd.meta
+    else:
+        pageMeta = pageMd.meta
+    template = pageMeta.get( "template", "article.html" )
     if pageMeta.get( "comments", False ):
         comment_id = "/%s/" % pageMd
         comment_title = pageMeta.get( "title", "No Title" )
@@ -219,7 +243,8 @@ def index():
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @app.route( "/<path:page_path>/" )
 def page( page_path ):
-    return article_page( "article.html", page_path )
+    print "tttttt", page_path
+    return article_page( page_path )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @app.route( "/feeds/atom.xml" )
 def atom():

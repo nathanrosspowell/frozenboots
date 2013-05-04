@@ -30,7 +30,11 @@
             {% endfor %}
         {% elif value|length is compute( ">", 1 ) %} 
             {% set active = menu_selected is equalto( key ) %} 
-            {% call macros.menu_dropdown( key|title, "", active ) %}
+            {% set drop_link = url_for( "page", page_path = key ) %}
+            {% call macros.menu_dropdown( key|title, drop_link, active ) %}
+                {{ macros.menu_link_item( "Index", drop_link, active ) }}
+                <li class="divider"></li>
+                <li class="nav-header">Nav header</li>
                 {% for data in value %}
                     {% set page_link = url_for( "page", page_path = data.path ) %}
                     {{ macros.menu_link_item( data.title, page_link ) }}
